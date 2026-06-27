@@ -69,15 +69,17 @@ a {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  background: rgba(51, 245, 255, 0.24);
-  filter: blur(1.2px);
-  opacity: 0.65;
+  background: radial-gradient(circle, rgba(51, 245, 255, 0.34), transparent 60%);
+  filter: blur(1.4px);
+  opacity: 0.75;
   transform: translate3d(0, 0, 0);
-  transition: transform 0.28s ease, opacity 0.28s ease;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  box-shadow: 0 0 60px rgba(51, 245, 255, 0.25);
+  animation: bubbleFloat 16s ease-in-out infinite alternate;
 }
 
 .hero:hover .hero-bubble {
-  opacity: 0.65;
+  opacity: 1;
 }
 
 .hero-actions {
@@ -102,6 +104,15 @@ a {
   }
 }
 
+@keyframes bubbleFloat {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 12px, 0) scale(1.05);
+  }
+}
+
 .hero-bubble:nth-child(1) {
   left: 12%;
   top: 20%;
@@ -121,14 +132,76 @@ a {
 .hero-bubble:nth-child(3) {
   left: 18%;
   bottom: 14%;
-  background: rgba(255, 255, 255, 0.08);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.24), transparent 70%);
   width: 75px;
   height: 75px;
 }
 
+.hero-bubble:nth-child(4) {
+  right: 22%;
+  bottom: 18%;
+  background: radial-gradient(circle, rgba(141, 140, 255, 0.28), transparent 70%);
+  width: 90px;
+  height: 90px;
+}
+
+.hero-bubble:nth-child(5) {
+  left: 45%;
+  top: 40%;
+  background: radial-gradient(circle, rgba(51, 245, 255, 0.28), transparent 70%);
+  width: 140px;
+  height: 140px;
+  mix-blend-mode: screen;
+}
+
+.hero-bubble:nth-child(6) {
+  right: 5%;
+  top: 12%;
+  background: radial-gradient(circle, rgba(141, 140, 255, 0.24), transparent 70%);
+  width: 55px;
+  height: 55px;
+  mix-blend-mode: screen;
+}
+
+.hero-bubble:nth-child(7) {
+  left: 24%;
+  bottom: 30%;
+  background: radial-gradient(circle, rgba(51, 245, 255, 0.14), transparent 70%);
+  width: 100px;
+  height: 100px;
+  mix-blend-mode: screen;
+}
+
+.hero-bubble:nth-child(8) {
+  right: 34%;
+  top: 22%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+  width: 65px;
+  height: 65px;
+  mix-blend-mode: screen;
+}
+
+.hero-bubble:nth-child(9) {
+  left: 8%;
+  top: 50%;
+  background: radial-gradient(circle, rgba(51, 245, 255, 0.2), transparent 70%);
+  width: 85px;
+  height: 85px;
+  mix-blend-mode: screen;
+}
+
+.hero-bubble:nth-child(10) {
+  right: 12%;
+  bottom: 6%;
+  background: radial-gradient(circle, rgba(141, 140, 255, 0.2), transparent 70%);
+  width: 115px;
+  height: 115px;
+  mix-blend-mode: screen;
+}
+
 .top-nav {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,6 +228,7 @@ a {
 
 .hero-content {
   position: relative;
+  z-index: 2;
   width: min(1120px, calc(100% - 2rem));
   margin: 2.2rem auto 0;
   padding: 1.6rem 0 1rem;
@@ -317,14 +391,17 @@ a {
   border-radius: 14px;
   padding: 14px;
   background: rgba(51, 255, 255, 0.03);
-  transition: border-color 0.14s, background 0.14s, transform 0.14s;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
 }
 
 .track-card:hover {
   border-color: var(--neon-accent);
-  background: rgba(51, 255, 255, 0.12);
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(12, 26, 42, 0.22);
+  background: rgba(51, 255, 255, 0.16);
+  box-shadow: 0 24px 60px rgba(12, 26, 42, 0.35);
+  transform: translateY(-4px) rotateX(0.3deg) rotateY(-0.3deg);
 }
 
 .track-icon {

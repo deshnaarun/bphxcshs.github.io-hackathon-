@@ -75,7 +75,7 @@ function setupHeroBubbles() {
     const y = (event.clientY - rect.top) / rect.height - 0.5;
 
     bubbles.forEach((bubble, index) => {
-      const strength = index === 0 ? 12 : index === 1 ? 9 : 6;
+      const strength = [26, 20, 16, 12, 10, 8, 14, 18, 11, 22][index] || 14;
       bubble.style.transform = `translate3d(${x * strength}px, ${y * strength}px, 0)`;
     });
   });
