@@ -33,22 +33,16 @@ document.querySelectorAll(".timeline-toggle").forEach((btn) => {
 function animateCounter(el) {
   if (el.dataset.animated) return;
   el.dataset.animated = "1";
-
-  const target = Number.parseInt(el.dataset.target, 10);
-  const prefix = el.dataset.prefix || "";
+  const target = parseInt(el.dataset.target, 10);
   const suffix = el.dataset.suffix || "";
-
-  if (Number.isNaN(target)) return;
-
+  if (isNaN(target)) return;
   let current = 0;
   const step = Math.max(1, Math.ceil(target / 40));
-
   const tick = () => {
     current = Math.min(current + step, target);
-    el.textContent = prefix + current + suffix;
+    el.textContent = current + suffix;
     if (current < target) requestAnimationFrame(tick);
   };
-
   requestAnimationFrame(tick);
 }
 
@@ -58,36 +52,21 @@ function animateMeterFills() {
     if (fill.dataset.animated) return;
     fill.dataset.animated = "1";
     const w = fill.dataset.width || "0";
-    setTimeout(() => {
-      fill.style.width = `${w}%`;
-    }, 80);
+    setTimeout(() => { fill.style.width = w + "%"; }, 80);
   });
 }
 
-function setupHeroBubbles() {
-  const hero = document.querySelector(".hero");
-  const bubbles = Array.from(document.querySelectorAll(".hero-bubble"));
-  if (!hero || bubbles.length === 0) return;
-
-  hero.addEventListener("mousemove", (event) => {
-    const rect = hero.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-    bubbles.forEach((bubble, index) => {
-      const strength = [26, 20, 16, 12, 10, 8, 14, 18, 11, 22][index] || 14;
-      bubble.style.transform = `translate3d(${x * strength}px, ${y * strength}px, 0)`;
-    });
+const hackObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.querySelectorAll(".stat-num[data-target]").forEach(animateCounter);
+    const activePanel = entry.target.querySelector(".hack-panel.active");
+    if (activePanel && activePanel.id === "tab-outcomes") animateMeterFills();
   });
+}, { threshold: 0.15 });
 
-  hero.addEventListener("mouseleave", () => {
-    bubbles.forEach((bubble) => {
-      bubble.style.transform = "translate3d(0, 0, 0)";
-    });
-  });
-}
-
-setupHeroBubbles();
+const hackSection = document.querySelector(".hackathon-section");
+if (hackSection) hackObserver.observe(hackSection);}
 
 function setupHeroParticles() {
   const hero = document.querySelector(".hero");
@@ -95,6 +74,8 @@ function setupHeroParticles() {
   if (!hero || !canvas) return;
 
   const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
   const dpr = window.devicePixelRatio || 1;
   let width = 0;
   let height = 0;
@@ -140,7 +121,7 @@ function setupHeroParticles() {
         const dx = particle.x - mouseX;
         const dy = particle.y - mouseY;
         const dist = Math.hypot(dx, dy);
-        if (dist < repelDistance && dist > 0) {
+        if (dist > 0 && dist < repelDistance) {
           const push = (repelDistance - dist) / repelDistance * 0.08;
           particle.vx += (dx / dist) * push;
           particle.vy += (dy / dist) * push;
@@ -154,9 +135,8 @@ function setupHeroParticles() {
 
   function drawParticles() {
     ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = "rgba(255,255,255,0.16)";
     ctx.lineWidth = 1;
-    ctx.beginPath();
+
     for (let i = 0; i < particleCount; i += 1) {
       for (let j = i + 1; j < particleCount; j += 1) {
         const a = particles[i];
@@ -167,16 +147,17 @@ function setupHeroParticles() {
         if (dist < maxDistance) {
           const alpha = 1 - dist / maxDistance;
           ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.18})`;
+          ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
+          ctx.stroke();
         }
       }
     }
-    ctx.stroke();
 
     particles.forEach((particle) => {
       ctx.beginPath();
-      ctx.fillStyle = "rgba(255,255,255,0.8)";
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
       ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
       ctx.fill();
     });
@@ -210,17 +191,3 @@ function setupHeroParticles() {
 }
 
 setupHeroParticles();
-
-const hackObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-    entry.target.querySelectorAll(".stat-num[data-target]").forEach(animateCounter);
-    const activePanel = entry.target.querySelector(".hack-panel.active");
-    if (activePanel && activePanel.id === "tab-outcomes") animateMeterFills();
-  });
-}, { threshold: 0.15 });
-
-const hackSection = document.querySelector(".hackathon-section");
-if (hackSection && "IntersectionObserver" in window) {
-  hackObserver.observe(hackSection);
-}
