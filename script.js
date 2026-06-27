@@ -66,7 +66,7 @@ const hackObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 const hackSection = document.querySelector(".hackathon-section");
-if (hackSection) hackObserver.observe(hackSection);}
+if (hackSection) hackObserver.observe(hackSection);
 
 function setupHeroParticles() {
   const hero = document.querySelector(".hero");
