@@ -33,16 +33,22 @@ document.querySelectorAll(".timeline-toggle").forEach((btn) => {
 function animateCounter(el) {
   if (el.dataset.animated) return;
   el.dataset.animated = "1";
-  const target = parseInt(el.dataset.target, 10);
+
+  const target = Number.parseInt(el.dataset.target, 10);
+  const prefix = el.dataset.prefix || "";
   const suffix = el.dataset.suffix || "";
-  if (isNaN(target)) return;
+
+  if (Number.isNaN(target)) return;
+
   let current = 0;
   const step = Math.max(1, Math.ceil(target / 40));
+
   const tick = () => {
     current = Math.min(current + step, target);
-    el.textContent = current + suffix;
+    el.textContent = prefix + current + suffix;
     if (current < target) requestAnimationFrame(tick);
   };
+
   requestAnimationFrame(tick);
 }
 
@@ -52,7 +58,9 @@ function animateMeterFills() {
     if (fill.dataset.animated) return;
     fill.dataset.animated = "1";
     const w = fill.dataset.width || "0";
-    setTimeout(() => { fill.style.width = w + "%"; }, 80);
+    setTimeout(() => {
+      fill.style.width = `${w}%`;
+    }, 80);
   });
 }
 
@@ -66,4 +74,6 @@ const hackObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 const hackSection = document.querySelector(".hackathon-section");
-if (hackSection) hackObserver.observe(hackSection);
+if (hackSection && "IntersectionObserver" in window) {
+  hackObserver.observe(hackSection);
+}
