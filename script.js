@@ -63,7 +63,7 @@ const hackObserver = new IntersectionObserver((entries) => {
     const activePanel = entry.target.querySelector(".hack-panel.active");
     if (activePanel && activePanel.id === "tab-outcomes") animateMeterFills();
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.18, rootMargin: "0px 0px -20% 0px" });
 
 const hackSection = document.querySelector(".hackathon-section");
 if (hackSection) hackObserver.observe(hackSection);
