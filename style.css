@@ -37,14 +37,96 @@ a {
 }
 
 .hero {
+  position: relative;
   min-height: 100vh;
-  padding: 1.25rem 0 4rem;
+  padding: 1.25rem 0 2.5rem;
+  overflow: hidden;
   background:
-    radial-gradient(circle at top left, rgba(51, 245, 255, 0.18), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(141, 140, 255, 0.2), transparent 28%);
+    radial-gradient(circle at top left, rgba(51, 245, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 22% 12%, rgba(141, 140, 255, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 28%),
+    linear-gradient(135deg, #02060f 0%, #04111f 45%, #02060f 100%);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05), transparent 28%);
+}
+
+.hero-bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-bubble {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(51, 245, 255, 0.18);
+  filter: blur(1.2px);
+  opacity: 0.45;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.hero:hover .hero-bubble {
+  opacity: 0.65;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.hero-actions .button {
+  min-width: 180px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-bubble:nth-child(1) {
+  left: 12%;
+  top: 20%;
+  background: rgba(51, 245, 255, 0.16);
+  width: 120px;
+  height: 120px;
+}
+
+.hero-bubble:nth-child(2) {
+  right: 10%;
+  top: 30%;
+  background: rgba(141, 140, 255, 0.14);
+  width: 95px;
+  height: 95px;
+}
+
+.hero-bubble:nth-child(3) {
+  left: 18%;
+  bottom: 14%;
+  background: rgba(255, 255, 255, 0.08);
+  width: 75px;
+  height: 75px;
 }
 
 .top-nav {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,9 +152,17 @@ a {
 }
 
 .hero-content {
+  position: relative;
   width: min(1120px, calc(100% - 2rem));
-  margin: 4.5rem auto 0;
-  padding: 3rem 0 1rem;
+  margin: 2.2rem auto 0;
+  padding: 1.6rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fadeInUp 0.9s ease forwards;
+  animation-delay: 0.14s;
 }
 
 .eyebrow {
@@ -97,12 +187,33 @@ a {
 }
 
 .button {
-  display: inline-block;
-  padding: 0.8rem 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.15rem;
   border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button.button-primary {
   background: linear-gradient(90deg, var(--neon), var(--neon-accent));
   color: #02111c;
-  font-weight: 700;
+}
+
+.button.button-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.button.button-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .hackathon-section {
@@ -163,6 +274,10 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin: 1.25rem 0 1rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.9s ease forwards;
+  animation-delay: 0.32s;
 }
 
 .hack-tab {
@@ -205,8 +320,9 @@ a {
 
 .track-card:hover {
   border-color: var(--neon-accent);
-  background: rgba(51, 255, 255, 0.07);
-  transform: translateY(-2px);
+  background: rgba(51, 255, 255, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(12, 26, 42, 0.22);
 }
 
 .track-icon {
@@ -321,8 +437,12 @@ a {
 .bootcamp-timeline {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 0.5rem;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+#schedule {
+  margin-top: 2rem;
 }
 
 .timeline-item {

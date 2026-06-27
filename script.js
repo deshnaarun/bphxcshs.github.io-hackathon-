@@ -64,6 +64,31 @@ function animateMeterFills() {
   });
 }
 
+function setupHeroBubbles() {
+  const hero = document.querySelector(".hero");
+  const bubbles = Array.from(document.querySelectorAll(".hero-bubble"));
+  if (!hero || bubbles.length === 0) return;
+
+  hero.addEventListener("mousemove", (event) => {
+    const rect = hero.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    bubbles.forEach((bubble, index) => {
+      const strength = index === 0 ? 12 : index === 1 ? 9 : 6;
+      bubble.style.transform = `translate3d(${x * strength}px, ${y * strength}px, 0)`;
+    });
+  });
+
+  hero.addEventListener("mouseleave", () => {
+    bubbles.forEach((bubble) => {
+      bubble.style.transform = "translate3d(0, 0, 0)";
+    });
+  });
+}
+
+setupHeroBubbles();
+
 const hackObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
